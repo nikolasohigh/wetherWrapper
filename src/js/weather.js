@@ -74,13 +74,13 @@ let time = setInterval(function() {
             break;
           }
         }
-      );
+      )
       } else {
         console.error('Geolocation не поддерживается в вашем браузере');
       }
 
       setTimeout(function(){
-        fetch(`http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${options.apiKeyWeather}&q=${options.latitude}%2C%20${options.longitude}`)
+        fetch(`https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${options.apiKeyWeather}&q=${options.latitude}%2C%20${options.longitude}`)
         .then(response => response.json())
         .then(data => {
             console.log(data);
