@@ -10,50 +10,72 @@ let options = {
   }
 
 //wrappers
-const weatherWrapper    = document.createElement('div'),
-      statbarWrapper    = document.createElement('div'),
-      forecastWrapper   = document.createElement('div'),
-      forecastList      = document.createElement('div'),
-      carouselWrapper   = document.createElement('div');
+// const weatherWrapper    = document.createElement('div'),
+//       statbarWrapper    = document.createElement('div'),
+//       forecastWrapper   = document.createElement('div'),
+//       forecastList      = document.createElement('div'),
+//       carouselWrapper   = document.createElement('div');
 //text elements
-const weatherTime       = document.createElement('div'),
-      weatherCity       = document.createElement('div'),
-      weatherState      = document.createElement('div'),
-      weatherMomentTemp = document.createElement('div'),
-      carouselItem      = document.createElement('div'),
-        carouselItemTime         = document.createElement('div'),
-        carouselItemIcoWrapper   = document.createElement('div'),
-        carouselItemIcoImg       = document.createElement('img'),
-        carouselItemTemperature  = document.createElement('div'),
-      forecastHeader    = document.createElement('div'),
-      forecastImg       = document.createElement('img');
+// const weatherTime       = document.createElement('div'),
+//       weatherCity       = document.createElement('div'),
+//       weatherState      = document.createElement('div'),
+//       weatherMomentTemp = document.createElement('div'),
+//       carouselItem      = document.createElement('div'),
+//         carouselItemTime         = document.createElement('div'),
+//         carouselItemIcoWrapper   = document.createElement('div'),
+//         carouselItemIcoImg       = document.createElement('img'),
+//         carouselItemTemperature  = document.createElement('div'),
+//       forecastHeader    = document.createElement('div'),
+//       forecastImg       = document.createElement('img');
 
-weatherWrapper.classList.add('weather__wrapper');
-statbarWrapper.classList.add('weather__statusbar');
-forecastWrapper.classList.add('forecast');
-carouselWrapper.classList.add('weather__carousel');
+// weatherWrapper.classList.add('weather__wrapper');
+// statbarWrapper.classList.add('weather__statusbar');
+// forecastWrapper.classList.add('forecast');
+// carouselWrapper.classList.add('weather__carousel');
 
-weatherTime.classList.add('weather__time');
-weatherCity.classList.add('weather__city');
-weatherState.classList.add('weather__state');
-weatherMomentTemp.classList.add('weather__temperature');
-carouselItem.classList.add('weather__carousel-item');
-    carouselItemTime.classList.add('weather__carousel-item__time');
-    carouselItemIcoWrapper.classList.add('weather__carousel-item__ico');
-    carouselItemIcoImg.classList.add('weather__carousel-item__ico-img');
-    carouselItemTemperature.classList.add('weather__carousel-item__temperature');
-forecastHeader.classList.add('forecast__header');
-forecastImg.classList.add('forecast__header-img');
+// weatherTime.classList.add('weather__time');
+// weatherCity.classList.add('weather__city');
+// weatherState.classList.add('weather__state');
+// weatherMomentTemp.classList.add('weather__temperature');
+// carouselItem.classList.add('weather__carousel-item');
+//     carouselItemTime.classList.add('weather__carousel-item__time');
+//     carouselItemIcoWrapper.classList.add('weather__carousel-item__ico');
+//     carouselItemIcoImg.classList.add('weather__carousel-item__ico-img');
+//     carouselItemTemperature.classList.add('weather__carousel-item__temperature');
+// forecastHeader.classList.add('forecast__header');
+// forecastImg.classList.add('forecast__header-img');
+
+let menu, slick;
+
 $(document).ready(function(){
     $('.weather__carousel').slick({
        infinite: false,
        slidesToShow: 5,
-       slidesToScroll: 5,
        arrows: false,
-       autoplay: true,
-       autoplaySpeed: 10000
+       swipeToSlide: true
+    }).on('touchmove', function(){
+        menu.slick('unslick');
+    }).on('touchend', function(){
+        menu.slick({
+            infinite: false,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            arrows: false,
+         });
     });
+
+    menu = $('.main').slick({
+       infinite: false,
+       slidesToShow: 1,
+       slidesToScroll: 1,
+       arrows: false,
+    });
+
+    
 });
+
+
+
 
 startApp();
 
