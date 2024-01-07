@@ -21,11 +21,7 @@ $(document).ready(function(){
 });
 
 loadOptions();
-let citiInit = setTimeout(function(){
-    
-        document.querySelector('.weather__city').textContent = options.city;
-    
-},4000)
+
     
 
 
@@ -92,7 +88,10 @@ let time = setInterval(function() {
         .catch(error => {
             console.error('Произошла ошибка:', error);
         })
-    },500);
+    },1000);
+    setTimeout(function(){
+        document.querySelector('.weather__city').textContent = options.city;
+    },4000)
 }
   
  
