@@ -21,13 +21,17 @@ $(document).ready(function(){
 });
 
 loadOptions();
-let city = setTimeout (function(){
-    document.querySelector('.weather__city').textContent = options.city;
-},1000);
+let citiInit = setTimeout(function(){
+    
+        document.querySelector('.weather__city').textContent = options.city;
+    
+},4000)
+    
+
 
 let time = setInterval(function() {
     let date = new Date();
-    document.querySelector(".weather__time").textContent = (date.getHours() + ":" + date.getMinutes());
+    document.querySelector(".weather__time").textContent = (date.getHours() + ":") + (date.getMinutes() >= 10 ? '' : '0') + date.getMinutes();
   }, 1000);
   
   function saveOptions() {
