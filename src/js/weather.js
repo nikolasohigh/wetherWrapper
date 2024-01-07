@@ -5,10 +5,45 @@ let options = {
     apiKeyWeather: 'GCS3qGbShGtrGN3opAK1SfaIdob7awdI',
     locationKey: null,
     city: null,
-    longitude: 1,
-    latitude: 1
+    longitude: null,
+    latitude: null
   }
 
+//wrappers
+const weatherWrapper    = document.createElement('div'),
+      statbarWrapper    = document.createElement('div'),
+      forecastWrapper   = document.createElement('div'),
+      forecastList      = document.createElement('div'),
+      carouselWrapper   = document.createElement('div');
+//text elements
+const weatherTime       = document.createElement('div'),
+      weatherCity       = document.createElement('div'),
+      weatherState      = document.createElement('div'),
+      weatherMomentTemp = document.createElement('div'),
+      carouselItem      = document.createElement('div'),
+        carouselItemTime         = document.createElement('div'),
+        carouselItemIcoWrapper   = document.createElement('div'),
+        carouselItemIcoImg       = document.createElement('img'),
+        carouselItemTemperature  = document.createElement('div'),
+      forecastHeader    = document.createElement('div'),
+      forecastImg       = document.createElement('img');
+
+weatherWrapper.classList.add('weather__wrapper');
+statbarWrapper.classList.add('weather__statusbar');
+forecastWrapper.classList.add('forecast');
+carouselWrapper.classList.add('weather__carousel');
+
+weatherTime.classList.add('weather__time');
+weatherCity.classList.add('weather__city');
+weatherState.classList.add('weather__state');
+weatherMomentTemp.classList.add('weather__temperature');
+carouselItem.classList.add('weather__carousel-item');
+    carouselItemTime.classList.add('weather__carousel-item__time');
+    carouselItemIcoWrapper.classList.add('weather__carousel-item__ico');
+    carouselItemIcoImg.classList.add('weather__carousel-item__ico-img');
+    carouselItemTemperature.classList.add('weather__carousel-item__temperature');
+forecastHeader.classList.add('forecast__header');
+forecastImg.classList.add('forecast__header-img');
 $(document).ready(function(){
     $('.weather__carousel').slick({
        infinite: false,
@@ -20,39 +55,36 @@ $(document).ready(function(){
     });
 });
 
-loadOptions();
+startApp();
 
-    
-
-
-let time = setInterval(function() {
-    let date = new Date();
-    document.querySelector(".weather__time").textContent = (date.getHours() + ":") + (date.getMinutes() >= 10 ? '' : '0') + date.getMinutes();
-  }, 1000);
-  
-  function saveOptions() {
-    localStorage.setItem('data', JSON.stringify(options));
-  }
-
-  function loadOptions() {
+function startApp() {
+    timeUpdate();
     if (localStorage.getItem('data') != null || localStorage.getItem('data') != undefined) {
         options = JSON.parse(localStorage.getItem('data'));
         options.isDownloaded = true;
+        buildWeather();
     } else {
         getGeoLocation();
     }
-  }
+}
 
-  function getGeoLocation() {
+function timeUpdate() {
+    setInterval(function() {
+        let date = new Date();
+        document.querySelector(".weather__time").textContent = (date.getHours() + ":") + (date.getMinutes() >= 10 ? '' : '0') + date.getMinutes();
+      }, 1000);
+}
+
+function saveOptions() {
+    localStorage.setItem('data', JSON.stringify(options));
+}
+
+function getGeoLocation() {
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
         function(position) {
-          
           options.latitude = position.coords.latitude;
           options.longitude = position.coords.longitude;
-    
-          console.log('Широта:', options.latitude);
-          console.log('Долгота:', options.longitude);
         },
         function(error) {
           switch (error.code) {
@@ -79,9 +111,9 @@ let time = setInterval(function() {
         fetch(`https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${options.apiKeyWeather}&q=${options.latitude}%2C%20${options.longitude}`)
         .then(response => response.json())
         .then(data => {
-            console.log(data);
             options.locationKey = data.Key;
             options.city = data.LocalizedName;
+            console.log(data);
             console.log(options.locationKey);
             console.log(options.city);
         })
@@ -89,9 +121,13 @@ let time = setInterval(function() {
             console.error('Произошла ошибка:', error);
         })
     },1000);
+    
     setTimeout(function(){
-        document.querySelector('.weather__city').textContent = options.city;
+        saveOptions();
+        buildWeather();
     },4000)
 }
   
- 
+function buildWeather() {
+    document.querySelector('.weather__city').textContent = options.city;
+}
