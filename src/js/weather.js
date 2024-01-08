@@ -87,7 +87,7 @@ function startApp() {
     if (localStorage.getItem('data') != null || localStorage.getItem('data') != undefined) {
         options = JSON.parse(localStorage.getItem('data'));
         options.isDownloaded = true;
-        buildWeather();
+        showCity();
     } else {
         getGeoLocation();
     }
@@ -95,11 +95,12 @@ function startApp() {
 
 function timeUpdate() {
     setInterval(function() {
-        document.querySelector(".weather__time").textContent = date.getHours() >= 10 ? (date.getHours() + ":") : ('0') + date.getHours() + (':') + (date.getMinutes() >= 10 ? '' : '0') + date.getMinutes();
+      document.querySelector(".weather__time").textContent = (date.getHours() < 10 ? ('0' + date.getHours()) : date.getHours()) + ":" + (date.getMinutes() < 10 ? ('0' + date.getMinutes()) : date.getMinutes());
       }, 1000);
 }
 
 function saveOptions() {
+    console.log("saving");
     localStorage.setItem('data', JSON.stringify(options));
 }
 
@@ -109,6 +110,8 @@ function getGeoLocation() {
         function(position) {
           options.latitude = position.coords.latitude;
           options.longitude = position.coords.longitude;
+          getCity(showCity);
+          saveOptions();
         },
         function(error) {
           switch (error.code) {
@@ -130,30 +133,11 @@ function getGeoLocation() {
       } else {
         console.error('Geolocation не поддерживается в вашем браузере');
       }
-
-      setTimeout(function(){
-        fetch(`https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${options.apiKeyWeather}&q=${options.latitude},${options.longitude}`)
-        .then(response => response.json())
-        .then(data => {
-            options.locationKey = data.Key;
-            options.city = data.LocalizedName;
-            console.log(data);
-            console.log(options.locationKey);
-            console.log(options.city);
-        })
-        .catch(error => {
-            console.error('Произошла ошибка:', error);
-        })
-    },1000);
-    
-    setTimeout(function(){
-        saveOptions();
-        buildWeather();
-    },4000)
 }
   
-function buildWeather() {
-    document.querySelector('.weather__city').textContent = options.city;
+function showCity() {
+  console.log("building");
+  document.querySelector('.weather__city').textContent = options.city;
 }
 
 function toCelcium(temperatureF) {
@@ -174,4 +158,22 @@ async function getTwelweHoursForecast() {
     } catch (error) {
       console.error('Произошла ошибка:', error);
     }
+}
+
+async function getCity(callback) {
+  try {
+    const response = await fetch(`https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${options.apiKeyWeather}&q=${options.latitude},${options.longitude}`); 
+    if (!response.ok) {
+      throw new Error('Network response was not ok.');
+    }
+    const data = await response.json();
+    options.locationKey = data.Key;
+    options.city = data.LocalizedName;
+    console.log(options.locationKey);
+    console.log(options.city);
+    console.log(data);
+    callback();
+  } catch (error) {
+    console.error('Произошла ошибка:', error);
+  }
 }
