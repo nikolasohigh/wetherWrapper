@@ -45,31 +45,40 @@ let options = {
 // forecastHeader.classList.add('forecast__header');
 // forecastImg.classList.add('forecast__header-img');
 
-let menu, slick;
+const date = new Date();
 
 $(document).ready(function(){
     $('.weather__carousel').slick({
        infinite: true,
-       slidesToShow: 3,
+       slidesToShow: 5,
        slidesToScroll: 1,
        arrows: false,
        autoplay: true,
        autoplaySpeed: 900,
        swipe: false,
+       responsive: [
+        {
+          breakpoint: 1024,
+          settings: {
+            slidesToShow: 4
+          }
+        },
+        {
+          breakpoint: 500,
+          settings: {
+            slidesToShow: 2
+          }
+        }
+       ]
     })
 
-    menu = $('.main').slick({
+    $('.main').slick({
        infinite: false,
        slidesToShow: 1,
        slidesToScroll: 1,
        arrows: false,
-    });
-
-    
+    });   
 });
-
-
-
 
 startApp();
 
@@ -86,7 +95,6 @@ function startApp() {
 
 function timeUpdate() {
     setInterval(function() {
-        let date = new Date();
         document.querySelector(".weather__time").textContent = date.getHours() >= 10 ? (date.getHours() + ":") : ('0') + date.getHours() + (':') + (date.getMinutes() >= 10 ? '' : '0') + date.getMinutes();
       }, 1000);
 }
@@ -124,7 +132,7 @@ function getGeoLocation() {
       }
 
       setTimeout(function(){
-        fetch(`https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${options.apiKeyWeather}&q=${options.latitude}%2C%20${options.longitude}`)
+        fetch(`https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${options.apiKeyWeather}&q=${options.latitude},${options.longitude}`)
         .then(response => response.json())
         .then(data => {
             options.locationKey = data.Key;
@@ -150,4 +158,20 @@ function buildWeather() {
 
 function toCelcium(temperatureF) {
   return Math.round((temperatureF-32)*(5/9));
+}
+
+async function getTwelweHoursForecast() {
+    try {
+      const response = await fetch(`https://corsproxy.io/?https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/167753?apikey=${options.apiKeyWeather}&language=uk-ua`); 
+      if (!response.ok) {
+        throw new Error('Network response was not ok.');
+      }
+  
+      const data = await response.json();
+  
+      console.log(data);
+
+    } catch (error) {
+      console.error('Произошла ошибка:', error);
+    }
 }
