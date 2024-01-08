@@ -49,20 +49,14 @@ let menu, slick;
 
 $(document).ready(function(){
     $('.weather__carousel').slick({
-       infinite: false,
-       slidesToShow: 5,
+       infinite: true,
+       slidesToShow: 3,
+       slidesToScroll: 1,
        arrows: false,
-       swipeToSlide: true
-    }).on('touchmove', function(){
-        menu.slick('unslick');
-    }).on('touchend', function(){
-        menu.slick({
-            infinite: false,
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            arrows: false,
-         });
-    });
+       autoplay: true,
+       autoplaySpeed: 900,
+       swipe: false,
+    })
 
     menu = $('.main').slick({
        infinite: false,
@@ -93,7 +87,7 @@ function startApp() {
 function timeUpdate() {
     setInterval(function() {
         let date = new Date();
-        document.querySelector(".weather__time").textContent = (date.getHours() + ":") + (date.getMinutes() >= 10 ? '' : '0') + date.getMinutes();
+        document.querySelector(".weather__time").textContent = date.getHours() >= 10 ? (date.getHours() + ":") : ('0') + date.getHours() + (':') + (date.getMinutes() >= 10 ? '' : '0') + date.getMinutes();
       }, 1000);
 }
 
@@ -152,4 +146,8 @@ function getGeoLocation() {
   
 function buildWeather() {
     document.querySelector('.weather__city').textContent = options.city;
+}
+
+function toCelcium(temperatureF) {
+  return Math.round((temperatureF-32)*(5/9));
 }
