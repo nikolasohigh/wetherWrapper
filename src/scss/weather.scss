@@ -78,6 +78,8 @@ $black-color: #0C0C0C;
             }
             &__ico {
                 margin-bottom: 5px;
+                height: 30px;
+                width: 30px;
             }
             &__temperature {
                 color: white;
@@ -144,4 +146,8 @@ $black-color: #0C0C0C;
 .monitoring__wrapper {
     min-width: 100vw;
     min-height: 100vh;
+}
+
+#stopA {
+    stop-color: blue;
 }
