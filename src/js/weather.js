@@ -111,7 +111,6 @@ function getGeoLocation() {
           options.latitude = position.coords.latitude;
           options.longitude = position.coords.longitude;
           getCity(showCity);
-          saveOptions();
         },
         function(error) {
           switch (error.code) {
@@ -176,4 +175,5 @@ async function getCity(callback) {
   } catch (error) {
     console.error('Произошла ошибка:', error);
   }
+  saveOptions();
 }

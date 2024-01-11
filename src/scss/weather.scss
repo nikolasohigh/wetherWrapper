@@ -32,6 +32,11 @@ $black-color: #0C0C0C;
     &__city {
         font-size: 50px;
         font-weight: 700;
+        &::after {
+            content: '';
+            display: block;
+            background: no-repeat url("../gps.svg");
+        }
     }
 
     &__state {
