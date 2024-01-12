@@ -54,7 +54,7 @@ $(document).ready(function(){
        slidesToScroll: 1,
        arrows: false,
        autoplay: true,
-       autoplaySpeed: 900,
+       autoplaySpeed: 1111,
        swipe: false,
        responsive: [
         {
@@ -177,3 +177,8 @@ async function getCity(callback) {
   }
   saveOptions();
 }
+
+document.querySelector('.weather__city').addEventListener('click', function() {
+  console.log('hui')
+  
+});
